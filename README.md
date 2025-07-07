@@ -304,4 +304,92 @@ python -m pytest tests/test_faucet_integration.py -v -s
 - Token transfers for USDG and PYUSD leverage the Token-2022 program, while USDC transfers use the standard SPL Token program and associated libraries
 - In Solana, to recieve either a SPL token or Token-2022 token, you must create an Associated Token Account, this the agent does that.
 
+## 🌐 Web Interface
+
+Two user-friendly web interfaces are available for interacting with the Solana Wallet Agent:
+
+### 👻 **Phantom Wallet Integration (Recommended)**
+Connect your existing Phantom wallet for maximum security - no private keys needed!
+
+**Quick Start:**
+```bash
+python start_phantom_interface.py
+# Visit http://localhost:5001
+```
+
+**Benefits:**
+- 🔒 **Secure**: Private keys never leave your browser
+- ⚡ **Easy**: One-click wallet connection  
+- 🎯 **Familiar**: Use your existing Phantom wallet
+- 📱 **Safe**: All transactions signed through Phantom
+
+**Requirements:** Phantom wallet extension + OpenAI API key only
+
+### 🔑 **Private Key Version (Advanced)**
+Traditional version using private keys in .env file.
+
+**Quick Start (Private Key Version):**
+1. Install dependencies: `pip install flask flask-cors`
+2. Setup .env with wallet private keys
+3. Run: `python start_web_interface.py`
+4. Visit: `http://localhost:5000`
+
+---
+
+## 🔧 Setup Instructions
+
+### For Phantom Integration (Recommended)
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Create simple .env (only OpenAI key needed)
+cp .env.phantom.template .env
+# Edit .env and add: OPENAI_API_KEY=your_key_here
+
+# 3. Start Phantom interface  
+python start_phantom_interface.py
+# Visit http://localhost:5001 and connect Phantom wallet
+```
+
+### For Private Key Version (Advanced)
+Follow the detailed setup instructions below...
+
+### Web Interface Features
+
+- **🎯 Natural Language Input**: Type commands in plain English
+- **📱 Responsive Design**: Works on desktop and mobile devices
+- **🔄 Real-time Execution**: Direct integration with DSPy agent
+- **🛡️ Smart Fallback**: Demo mode when backend is unavailable
+- **✅ Environment Checking**: Automatic validation of setup requirements
+
+### Example Web Commands
+
+Simply type these commands in the web interface:
+
+```text
+Create a new wallet and fund it with 0.5 SOL and 10 USDC
+```
+
+```text
+Send 5 USDC to my last created wallet
+```
+
+```text
+Check balance of my last wallet
+```
+
+```text
+Get the public key of my last wallet
+```
+
+The web interface supports all the same functionality as the command line version, but with a more user-friendly experience. Perfect for users who prefer GUI over command line interaction.
+
+### Web Interface Files
+
+- `index.html` - Main web interface
+- `app.py` - Flask backend API
+- `start_web_interface.py` - Smart startup script
+- `WEB_INTERFACE_README.md` - Detailed web interface documentation
+
 

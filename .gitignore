@@ -1,5 +1,15 @@
-# Environment variables
+# Environment variables and secrets
 .env
+.env.local
+.env.production
+*.key
+private_keys/
+wallet_keys/
+
+# Logs and temporary files
+*.log
+app.log
+*.tmp
 
 # Python virtual environment
 venv/
@@ -16,4 +26,10 @@ build/
 .idea/
 .vscode/
 *.swp
-*.swo 
+*.swo
+
+# macOS
+.DS_Store
+
+# Vercel
+.vercel 
