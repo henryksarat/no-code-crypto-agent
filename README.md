@@ -304,4 +304,68 @@ python -m pytest tests/test_faucet_integration.py -v -s
 - Token transfers for USDG and PYUSD leverage the Token-2022 program, while USDC transfers use the standard SPL Token program and associated libraries
 - In Solana, to recieve either a SPL token or Token-2022 token, you must create an Associated Token Account, this the agent does that.
 
+## 🌐 Web Interface
+
+A user-friendly web interface is available for interacting with the Solana Wallet Agent through natural language commands in your browser.
+
+### Quick Start Web Interface
+
+1. **Install additional dependencies:**
+   ```bash
+   pip install flask flask-cors
+   ```
+
+2. **Start the web interface:**
+   ```bash
+   # Option 1: Use the smart startup script (recommended)
+   python start_web_interface.py
+   
+   # Option 2: Run Flask directly
+   python app.py
+   
+   # Option 3: Use custom port if 5000 is occupied
+   PORT=3000 python app.py
+   ```
+
+3. **Open your browser:**
+   - Visit `http://localhost:5000` (or your custom port)
+   - If port 5000 is occupied by AirPlay Receiver, try `http://localhost:3000`
+
+### Web Interface Features
+
+- **🎯 Natural Language Input**: Type commands in plain English
+- **📱 Responsive Design**: Works on desktop and mobile devices
+- **🔄 Real-time Execution**: Direct integration with DSPy agent
+- **🛡️ Smart Fallback**: Demo mode when backend is unavailable
+- **✅ Environment Checking**: Automatic validation of setup requirements
+
+### Example Web Commands
+
+Simply type these commands in the web interface:
+
+```text
+Create a new wallet and fund it with 0.5 SOL and 10 USDC
+```
+
+```text
+Send 5 USDC to my last created wallet
+```
+
+```text
+Check balance of my last wallet
+```
+
+```text
+Get the public key of my last wallet
+```
+
+The web interface supports all the same functionality as the command line version, but with a more user-friendly experience. Perfect for users who prefer GUI over command line interaction.
+
+### Web Interface Files
+
+- `index.html` - Main web interface
+- `app.py` - Flask backend API
+- `start_web_interface.py` - Smart startup script
+- `WEB_INTERFACE_README.md` - Detailed web interface documentation
+
 
