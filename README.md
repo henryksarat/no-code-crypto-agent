@@ -306,30 +306,54 @@ python -m pytest tests/test_faucet_integration.py -v -s
 
 ## 🌐 Web Interface
 
-A user-friendly web interface is available for interacting with the Solana Wallet Agent through natural language commands in your browser.
+Two user-friendly web interfaces are available for interacting with the Solana Wallet Agent:
 
-### Quick Start Web Interface
+### 👻 **Phantom Wallet Integration (Recommended)**
+Connect your existing Phantom wallet for maximum security - no private keys needed!
 
-1. **Install additional dependencies:**
-   ```bash
-   pip install flask flask-cors
-   ```
+**Quick Start:**
+```bash
+python start_phantom_interface.py
+# Visit http://localhost:5001
+```
 
-2. **Start the web interface:**
-   ```bash
-   # Option 1: Use the smart startup script (recommended)
-   python start_web_interface.py
-   
-   # Option 2: Run Flask directly
-   python app.py
-   
-   # Option 3: Use custom port if 5000 is occupied
-   PORT=3000 python app.py
-   ```
+**Benefits:**
+- 🔒 **Secure**: Private keys never leave your browser
+- ⚡ **Easy**: One-click wallet connection  
+- 🎯 **Familiar**: Use your existing Phantom wallet
+- 📱 **Safe**: All transactions signed through Phantom
 
-3. **Open your browser:**
-   - Visit `http://localhost:5000` (or your custom port)
-   - If port 5000 is occupied by AirPlay Receiver, try `http://localhost:3000`
+**Requirements:** Phantom wallet extension + OpenAI API key only
+
+### 🔑 **Private Key Version (Advanced)**
+Traditional version using private keys in .env file.
+
+**Quick Start (Private Key Version):**
+1. Install dependencies: `pip install flask flask-cors`
+2. Setup .env with wallet private keys
+3. Run: `python start_web_interface.py`
+4. Visit: `http://localhost:5000`
+
+---
+
+## 🔧 Setup Instructions
+
+### For Phantom Integration (Recommended)
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Create simple .env (only OpenAI key needed)
+cp .env.phantom.template .env
+# Edit .env and add: OPENAI_API_KEY=your_key_here
+
+# 3. Start Phantom interface  
+python start_phantom_interface.py
+# Visit http://localhost:5001 and connect Phantom wallet
+```
+
+### For Private Key Version (Advanced)
+Follow the detailed setup instructions below...
 
 ### Web Interface Features
 

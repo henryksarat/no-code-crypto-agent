@@ -1,0 +1,126 @@
+✅ Using DeepSeek AI model (Free)
+🚀 Starting Solana Wallet Agent with Phantom Integration
+👻 Connect your Phantom wallet to get started
+🔗 Phantom wallet extension required
+🌐 Web interface available at: http://localhost:5001
+📱 Make sure you have Phantom wallet installed in your browser
+ * Serving Flask app 'app_phantom'
+ * Debug mode: off
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://26.26.26.1:5001
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [07/Jul/2025 18:18:20] "[36mGET / HTTP/1.1[0m" 304 -
+INFO:__main__:Executing Phantom command: 展示我的钱包信息 for wallet: CsAtghCiunAqpsuNdMWeGLHbsEygjpWUTMGeQV83yoJh
+[92m18:18:27 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:18:38 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:18:38 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:18:38 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:18:38 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:18:43 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:18:53 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:18:53 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:18:53 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:18:53 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:18:53 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:19:10 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:19:10 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:19:10 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:19:10 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+INFO:__main__:AI Agent result: {'process_result': 'Here are your Phantom wallet details (accessed securely through your browser extension):\n\n- Wallet Address: CsAtghCiunAqpsuNdMWeGLHbsEygjpWUTMGeQV83yoJh\n- Network: Solana Devnet\n- SOL Balance: 4.60574332 SOL\n- Account Status: Active (exists on blockchain)\n- Token Accounts: 1 associated token account\n- Wallet Type: Phantom Wallet (most secure option)\n\nSecurity Note: This information was retrieved directly through your Phantom wallet interface - your private keys were never exposed or transmitted. For additional security, you can verify this information matches what you see in your Phantom wallet extension.\n\nWould you like to see more detailed information about your token accounts or transaction history?'}
+INFO:werkzeug:127.0.0.1 - - [07/Jul/2025 18:19:10] "POST /api/execute-phantom HTTP/1.1" 200 -
+INFO:__main__:Executing Phantom command: 创建一个新钱包 for wallet: CsAtghCiunAqpsuNdMWeGLHbsEygjpWUTMGeQV83yoJh
+[92m18:20:23 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:20:33 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:20:33 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:33 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:33 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:33 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:20:45 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:20:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:45 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:46 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:20:58 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:20:58 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:58 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:20:58 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+INFO:httpx:HTTP Request: POST https://api.devnet.solana.com "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.devnet.solana.com "HTTP/1.1 200 OK"
+[92m18:21:02 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:21:12 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:21:12 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:21:12 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:21:12 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:21:12 - LiteLLM:INFO[0m: utils.py:3101 - 
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:LiteLLM:
+LiteLLM completion() model= deepseek-chat; provider = deepseek
+INFO:httpx:HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+[92m18:21:41 - LiteLLM:INFO[0m: utils.py:1215 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+[92m18:21:41 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:21:41 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+[92m18:21:41 - LiteLLM:INFO[0m: cost_calculator.py:655 - selected model name for cost calculation: deepseek/deepseek-chat
+INFO:LiteLLM:selected model name for cost calculation: deepseek/deepseek-chat
+INFO:__main__:AI Agent result: {'process_result': '已成功完成以下操作：\n1. 使用传统钱包创建功能创建了新Solana钱包：\n   - 公钥: Bfv8UbZjrQ7NdDKD52wwTzsCvD5w8gerrvRGQUG31ubE\n   - 私钥: TjqZd1m8JDGp3tcQwsd7A1HGsYHoVGNaHgBUvfzMPe4JSjrspPUKNpVDRrvg6GHHGmLWpUaDsHBvHJD1A38mE1n\n   (重要提示：请妥善保管私钥，建议立即备份并存储在安全位置)\n\n2. 通过资金钱包向新钱包注入了0.01 SOL初始资金：\n   - 发送方: CsAtghCiunAqpsuNdMWeGLHbsEygjpWUTMGeQV83yoJh\n   - 接收方: Bfv8UbZjrQ7NdDKD52wwTzsCvD5w8gerrvRGQUG31ubE\n   - 金额: 0.01 SOL\n\n安全建议：\n- 新创建的钱包是独立于Phantom钱包的，需要单独管理\n- 如需将新钱包导入Phantom，可以使用私钥导入功能\n- 对于日常使用，建议优先使用Phantom钱包，因其提供更好的安全性和用户体验'}
+INFO:werkzeug:127.0.0.1 - - [07/Jul/2025 18:21:41] "POST /api/execute-phantom HTTP/1.1" 200 -

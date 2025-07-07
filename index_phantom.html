@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Wallet Agent - Phantom Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .left-panel {
+            background: #f8f9fa;
+            padding: 40px;
+            flex: 1;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .right-panel {
+            padding: 40px;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phantom-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ab9ff2 0%, #4c2889 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .wallet-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: #28a745;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .connect-btn {
+            background: linear-gradient(135deg, #ab9ff2 0%, #4c2889 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(171, 159, 242, 0.3);
+        }
+
+        .connect-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .wallet-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .wallet-info.show {
+            display: block;
+        }
+
+        .wallet-address {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            color: #495057;
+            word-break: break-all;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-section {
+            margin-top: 30px;
+        }
+
+        .output-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 300px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            color: #495057;
+        }
+
+        .output-box.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+
+        .output-box.error {
+            background: #fff5f5;
+            border-color: #feb2b2;
+            color: #c53030;
+        }
+
+        .output-box.success {
+            background: #f0fff4;
+            border-color: #9ae6b4;
+            color: #2f855a;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .example-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 12px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .example-section h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .example-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .example-section li {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .example-section li:hover {
+            background: #f5f5f5;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #856404;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 100%;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="header">
+                <h1>
+                    <div class="phantom-icon">P</div>
+                    Solana Wallet Agent
+                </h1>
+                <p>Connect your Phantom wallet and use natural language to interact with Solana blockchain. No private keys needed!</p>
+            </div>
+
+            <div class="wallet-section">
+                <div class="wallet-status">
+                    <div class="status-indicator">
+                        <div class="status-dot" id="statusDot"></div>
+                        <span id="statusText">Wallet Disconnected</span>
+                    </div>
+                    <button id="connectBtn" class="connect-btn">
+                        Connect Phantom
+                    </button>
+                </div>
+                <div id="walletInfo" class="wallet-info">
+                    <strong>Connected Address:</strong>
+                    <div class="wallet-address" id="walletAddress"></div>
+                </div>
+            </div>
+
+            <div class="warning-box" id="walletWarning">
+                ⚠️ Please connect your Phantom wallet to start using the agent.
+            </div>
+            
+            <div class="input-group">
+                <label for="userInput">Enter Your Command</label>
+                <textarea 
+                    id="userInput" 
+                    class="input-field" 
+                    rows="6" 
+                    placeholder="Example: Check my wallet balance for all tokens"
+                    disabled
+                ></textarea>
+            </div>
+            
+            <button id="submitBtn" class="submit-btn" disabled>Execute Command</button>
+            
+            <div class="example-section">
+                <h3>Example Commands:</h3>
+                <ul>
+                    <li onclick="setExample(this)">Create a new wallet</li>
+                    <li onclick="setExample(this)">Create associated token account for USDC</li>
+                    <li onclick="setExample(this)">Fund my wallet with SOL from devnet</li>
+                    <li onclick="setExample(this)">Send 5 USDC from funding wallet to my wallet</li>
+                    <li onclick="setExample(this)">Get last user wallet created</li>
+                    <li onclick="setExample(this)">Get my wallet balance for SOL</li>
+                    <li onclick="setExample(this)">Show my wallet information</li>
+                    <li onclick="setExample(this)">Get my wallet's transaction history</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="output-section">
+                <h2>Output</h2>
+                <div id="output" class="output-box">
+                    Welcome to Solana Wallet Agent with Phantom Integration!
+                    
+🔗 Connect your Phantom wallet to get started
+📱 All operations are signed through your wallet
+🔒 Your private keys never leave your browser
+
+Available operations:
+• Create wallets and manage accounts
+• Fund wallets from devnet faucet
+• Send tokens and SOL
+• Check balances and wallet information
+• View transaction history
+• Create token accounts for various tokens
+
+Please connect your Phantom wallet to begin...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let walletConnected = false;
+        let walletAddress = null;
+        let provider = null;
+
+        const connectBtn = document.getElementById('connectBtn');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const walletInfo = document.getElementById('walletInfo');
+        const walletAddressEl = document.getElementById('walletAddress');
+        const userInput = document.getElementById('userInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const output = document.getElementById('output');
+        const walletWarning = document.getElementById('walletWarning');
+
+        // Initialize Phantom wallet connection
+        async function initializeWallet() {
+            if ('solana' in window) {
+                provider = window.solana;
+                if (provider.isPhantom) {
+                    console.log('Phantom wallet detected');
+                    // Check if already connected
+                    if (provider.isConnected) {
+                        await handleWalletConnect();
+                    }
+                } else {
+                    showError('Phantom wallet not detected. Please install Phantom wallet extension.');
+                }
+            } else {
+                showError('Solana wallet not detected. Please install Phantom wallet extension.');
+            }
+        }
+
+        // Connect to Phantom wallet
+        async function connectWallet() {
+            if (!provider) {
+                showError('Phantom wallet not available. Please install Phantom wallet extension.');
+                return;
+            }
+
+            try {
+                const response = await provider.connect();
+                await handleWalletConnect();
+            } catch (error) {
+                console.error('Error connecting to wallet:', error);
+                showError('Failed to connect to wallet: ' + error.message);
+            }
+        }
+
+        // Handle successful wallet connection
+        async function handleWalletConnect() {
+            try {
+                const publicKey = provider.publicKey;
+                if (publicKey) {
+                    walletConnected = true;
+                    walletAddress = publicKey.toString();
+                    
+                    // Update UI
+                    statusDot.classList.add('connected');
+                    statusText.textContent = 'Wallet Connected';
+                    connectBtn.textContent = 'Disconnect';
+                    connectBtn.onclick = disconnectWallet;
+                    
+                    walletAddressEl.textContent = walletAddress;
+                    walletInfo.classList.add('show');
+                    walletWarning.style.display = 'none';
+                    
+                    userInput.disabled = false;
+                    submitBtn.disabled = false;
+                    
+                    showSuccess('Phantom wallet connected successfully!\nWallet Address: ' + walletAddress);
+                }
+            } catch (error) {
+                console.error('Error handling wallet connection:', error);
+                showError('Error handling wallet connection: ' + error.message);
+            }
+        }
+
+        // Disconnect wallet
+        async function disconnectWallet() {
+            try {
+                if (provider && provider.isConnected) {
+                    await provider.disconnect();
+                }
+                
+                walletConnected = false;
+                walletAddress = null;
+                
+                // Update UI
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'Wallet Disconnected';
+                connectBtn.textContent = 'Connect Phantom';
+                connectBtn.onclick = connectWallet;
+                
+                walletInfo.classList.remove('show');
+                walletWarning.style.display = 'block';
+                
+                userInput.disabled = true;
+                submitBtn.disabled = true;
+                userInput.value = '';
+                
+                showInfo('Wallet disconnected. Please connect your wallet to continue.');
+            } catch (error) {
+                console.error('Error disconnecting wallet:', error);
+                showError('Error disconnecting wallet: ' + error.message);
+            }
+        }
+
+        // Set example command
+        function setExample(element) {
+            if (walletConnected) {
+                userInput.value = element.textContent;
+                userInput.focus();
+            } else {
+                showError('Please connect your wallet first');
+            }
+        }
+
+        // Execute command
+        async function executeCommand() {
+            if (!walletConnected) {
+                showError('Please connect your Phantom wallet first');
+                return;
+            }
+
+            const command = userInput.value.trim();
+            
+            if (!command) {
+                showError('Please enter a command');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/execute-phantom', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_request: command,
+                        wallet_address: walletAddress,
+                        wallet_connected: walletConnected
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Check if transaction signature is required
+                    if (result.needs_signature) {
+                        try {
+                            const transaction = result.transaction;
+                            const signedTransaction = await provider.signTransaction(transaction);
+                            
+                            // Send signed transaction back to backend
+                            const signedResponse = await fetch('/api/submit-transaction', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    signed_transaction: signedTransaction,
+                                    original_request: command
+                                })
+                            });
+                            
+                            const signedResult = await signedResponse.json();
+                            showSuccess(signedResult.process_result || 'Transaction submitted successfully');
+                        } catch (signError) {
+                            showError('Transaction signing cancelled or failed: ' + signError.message);
+                        }
+                    } else {
+                        showSuccess(result.process_result || result.result || 'Command executed successfully');
+                    }
+                } else {
+                    showError(result.error || 'An error occurred');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            }
+        }
+
+        // UI helper functions
+        function showLoading() {
+            output.className = 'output-box loading';
+            output.innerHTML = '<div class="loading-spinner"></div>Processing your request...';
+            submitBtn.disabled = true;
+        }
+
+        function showSuccess(message) {
+            output.className = 'output-box success';
+            output.textContent = message;
+            submitBtn.disabled = false;
+        }
+
+        function showError(message) {
+            output.className = 'output-box error';
+            output.textContent = 'Error: ' + message;
+            submitBtn.disabled = walletConnected ? false : true;
+        }
+
+        function showInfo(message) {
+            output.className = 'output-box';
+            output.textContent = message;
+        }
+
+        // Event listeners
+        connectBtn.addEventListener('click', connectWallet);
+        submitBtn.addEventListener('click', executeCommand);
+        
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey && walletConnected) {
+                executeCommand();
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', initializeWallet);
+
+        // Listen for wallet events
+        if (window.solana) {
+            window.solana.on('connect', handleWalletConnect);
+            window.solana.on('disconnect', disconnectWallet);
+        }
+    </script>
+</body>
+</html>
