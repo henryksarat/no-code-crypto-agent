@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Wallet Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .left-panel {
+            background: #f8f9fa;
+            padding: 40px;
+            flex: 1;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .right-panel {
+            padding: 40px;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-section {
+            margin-top: 30px;
+        }
+
+        .output-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 300px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            color: #495057;
+        }
+
+        .output-box.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+
+        .output-box.error {
+            background: #fff5f5;
+            border-color: #feb2b2;
+            color: #c53030;
+        }
+
+        .output-box.success {
+            background: #f0fff4;
+            border-color: #9ae6b4;
+            color: #2f855a;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .example-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 12px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .example-section h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .example-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .example-section li {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .example-section li:hover {
+            background: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 100%;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="header">
+                <h1>Solana Wallet Agent</h1>
+                <p>Use natural language to interact with Solana wallets. Create wallets, transfer tokens, and manage your crypto assets with simple commands.</p>
+            </div>
+            
+            <div class="input-group">
+                <label for="userInput">Enter Your Command</label>
+                <textarea 
+                    id="userInput" 
+                    class="input-field" 
+                    rows="6" 
+                    placeholder="Example: Create a new wallet and fund it with 0.5 SOL and 10 USDC"
+                ></textarea>
+            </div>
+            
+            <button id="submitBtn" class="submit-btn">Execute Command</button>
+            
+            <div class="example-section">
+                <h3>Example Commands:</h3>
+                <ul>
+                    <li onclick="setExample(this)">Create a new wallet and fund it with 0.2 SOL</li>
+                    <li onclick="setExample(this)">Send 5 USDC to my last created wallet</li>
+                    <li onclick="setExample(this)">Check balance of my last wallet</li>
+                    <li onclick="setExample(this)">Create associated token account for PYUSD</li>
+                    <li onclick="setExample(this)">Get public key of my last wallet</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="output-section">
+                <h2>Output</h2>
+                <div id="output" class="output-box">
+                    Ready to execute your commands...
+                    
+Available functions:
+• create_wallet - Create a new Solana wallet
+• create_associated_token_account_for_token - Create token accounts
+• fund_user_wallet_with_sol_from_devnet - Fund with SOL from faucet
+• send_token_from_funding_wallet - Transfer tokens
+• get_last_user_wallet_created - Get last wallet info
+• get_last_user_wallet_balance - Check wallet balance
+
+Supported tokens: SOL, USDC, PYUSD, USDG
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userInput = document.getElementById('userInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const output = document.getElementById('output');
+
+        function setExample(element) {
+            userInput.value = element.textContent;
+            userInput.focus();
+        }
+
+        async function executeCommand() {
+            const command = userInput.value.trim();
+            
+            if (!command) {
+                showError('Please enter a command');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_request: command
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showSuccess(result.process_result || result.result || 'Command executed successfully');
+                } else {
+                    showError(result.error || 'An error occurred');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            }
+        }
+
+        function showLoading() {
+            output.className = 'output-box loading';
+            output.innerHTML = '<div class="loading-spinner"></div>Processing your request...';
+            submitBtn.disabled = true;
+        }
+
+        function showSuccess(message) {
+            output.className = 'output-box success';
+            output.textContent = message;
+            submitBtn.disabled = false;
+        }
+
+        function showError(message) {
+            output.className = 'output-box error';
+            output.textContent = 'Error: ' + message;
+            submitBtn.disabled = false;
+        }
+
+        submitBtn.addEventListener('click', executeCommand);
+        
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                executeCommand();
+            }
+        });
+
+        // Check if backend is available
+        async function checkBackendHealth() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                return response.ok && data.agent_available;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Demo mode - simulate API calls when backend is not available
+        function simulateAPICall() {
+            const command = userInput.value.trim().toLowerCase();
+            
+            if (command.includes('create') && command.includes('wallet')) {
+                return {
+                    process_result: `Successfully created new wallet with public key: EtaYkmrAFfNJycwk8LdXHgJvEKeXuSebQGLNnUapFcQZ
+${command.includes('fund') ? 'Wallet funded successfully with requested amounts.' : ''}`
+                };
+            } else if (command.includes('balance')) {
+                return {
+                    process_result: `Wallet Balance:
+SOL: 0.500
+USDC: 25.000
+PYUSD: 0.000
+USDG: 3.000`
+                };
+            } else if (command.includes('send') || command.includes('transfer')) {
+                return {
+                    process_result: 'Token transfer completed successfully. Transaction confirmed on Solana devnet.'
+                };
+            } else {
+                return {
+                    process_result: 'Command processed successfully. Please check the Solana explorer for transaction details.'
+                };
+            }
+        }
+
+        // Execute command with real API or fallback to demo
+        async function executeCommand() {
+            const command = userInput.value.trim();
+            
+            if (!command) {
+                showError('Please enter a command');
+                return;
+            }
+
+            showLoading();
+            
+            // Check if backend is available
+            const backendAvailable = await checkBackendHealth();
+            
+            if (backendAvailable) {
+                // Use real API
+                try {
+                    const response = await fetch('/api/execute', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            user_request: command
+                        })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        showSuccess(result.process_result || result.result || 'Command executed successfully');
+                    } else {
+                        showError(result.error || 'An error occurred');
+                    }
+                } catch (error) {
+                    showError('Network error: ' + error.message);
+                }
+            } else {
+                // Fallback to demo mode
+                setTimeout(() => {
+                    const result = simulateAPICall();
+                    showSuccess(`[DEMO MODE] ${result.process_result}
+                    
+Note: Backend not available. This is a simulated response.
+To use the real agent, please:
+1. Set up your .env file with API keys
+2. Run: python app.py`);
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
