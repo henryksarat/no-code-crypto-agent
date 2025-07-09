@@ -301,7 +301,7 @@ def health_check_phantom():
     })
 
 if __name__ == '__main__':
-    print("🚀 Starting Solana Wallet Agent with Phantom Integration")
+    print("🚀 Starting Solana No-code Agent with Phantom Integration")
     print("👻 Connect your Phantom wallet to get started")
     print("🔗 Phantom wallet extension required")
     

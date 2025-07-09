@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Solana Wallet Agent Web Interface Startup Script
+Solana No-code Agent Web Interface Startup Script
 
-This script starts the web interface for the Solana Wallet Agent.
+This script starts the web interface for the Solana No-code Agent.
 It checks for required dependencies and environment setup before starting the Flask server.
 """
 
@@ -61,7 +61,7 @@ def check_environment():
 
 def main():
     """Main function to start the web interface"""
-    print("🚀 Starting Solana Wallet Agent Web Interface")
+    print("🚀 Starting Solana No-code Agent Web Interface")
     print("=" * 50)
     
     # Check environment

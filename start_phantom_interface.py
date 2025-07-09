@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Solana Wallet Agent - Phantom Integration Startup Script
+Solana No-code Agent - Phantom Integration Startup Script
 
 This script starts the web interface with Phantom wallet integration.
 No private keys needed - all operations are performed through Phantom wallet.
@@ -124,7 +124,7 @@ def print_phantom_info():
 
 def main():
     """Main function to start the Phantom wallet interface"""
-    print("👻 Starting Solana Wallet Agent - Phantom Integration")
+    print("👻 Starting Solana No-code Agent - Phantom Integration")
     print_phantom_info()
     
     # Check environment
