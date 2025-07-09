@@ -5,7 +5,8 @@
       "src": "api/index.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "50mb"
+        "maxLambdaSize": "50mb",
+        "maxDuration": 30
       }
     }
   ],
@@ -21,10 +22,5 @@
   ],
   "env": {
     "AI_MODEL_PROVIDER": "deepseek"
-  },
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 30
-    }
   }
 }
