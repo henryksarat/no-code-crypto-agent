@@ -1,18 +1,24 @@
 import dspy
 import os
 
-from .agent_tools import (
-    create_wallet,
-    create_associated_token_account_for_token,
-    fund_user_wallet_with_sol_from_devnet,
-    send_token_from_funding_wallet,
-    get_last_user_wallet_created,
-    get_last_user_wallet_balance,
+from .agent_tools_solana import (
+    create_solana_wallet,
+    create_solana_associated_token_account_for_token,
+    fund_solana_user_wallet_with_sol_from_devnet,
+    send_solana_token_from_funding_wallet,
+    get_last_solana_user_wallet_created,
+    get_last_solana_user_wallet_balance,
+)
+
+from .agent_tools_evm import (
+    create_evm_wallet,
+    send_evm_token_from_funding_wallet,
+    get_last_evm_user_wallet_created,
+    get_last_evm_user_wallet_balance,
 )
 
 lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
-
 
 class DSPyWalletServiceSerice(dspy.Signature):
     """
@@ -93,11 +99,18 @@ class DSPyWalletServiceSerice(dspy.Signature):
 agent_with_usdg_validation = dspy.ReAct(
     DSPyWalletServiceSerice,
     tools=[
-        create_wallet,
-        create_associated_token_account_for_token,
-        fund_user_wallet_with_sol_from_devnet,
-        send_token_from_funding_wallet,
-        get_last_user_wallet_created,
-        get_last_user_wallet_balance,
+        # Solana tools
+        create_solana_wallet,
+        create_solana_associated_token_account_for_token,
+        fund_solana_user_wallet_with_sol_from_devnet,
+        send_solana_token_from_funding_wallet,
+        get_last_solana_user_wallet_created,
+        get_last_solana_user_wallet_balance,
+        
+        # EVM tools
+        create_evm_wallet,
+        send_evm_token_from_funding_wallet,
+        get_last_evm_user_wallet_created,
+        get_last_evm_user_wallet_balance,
     ]
 ) 

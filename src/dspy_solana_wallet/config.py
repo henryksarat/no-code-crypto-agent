@@ -8,8 +8,8 @@ load_dotenv(os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
 SOLANA_NETWORK = "devnet"  
 
 # Funding wallet configuration
-FUNDING_WALLET_PRIVATE_KEY = os.getenv("FUNDING_WALLET_PRIVATE_KEY")
-FUNDING_WALLET_PUBLIC_KEY = os.getenv("FUNDING_WALLET_PUBLIC_KEY")
+SOLANA_FUNDING_WALLET_PRIVATE_KEY = os.getenv("SOLANA_FUNDING_WALLET_PRIVATE_KEY")
+SOLANA_FUNDING_WALLET_PUBLIC_KEY = os.getenv("SOLANA_FUNDING_WALLET_PUBLIC_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 RANDOM = os.getenv("RANDOM")

@@ -26,12 +26,12 @@ class TestWalletFlow(unittest.TestCase):
         print("SETTING UP TEST - Checking funding wallet...")
         print("="*60)
         
-        if not config.FUNDING_WALLET_PRIVATE_KEY:
-            print("❌ SKIPPING: Funding wallet private key not configured")
-            self.skipTest("Funding wallet private key not configured")
+        if not config.SOLANA_FUNDING_WALLET_PRIVATE_KEY:
+            print("❌ SKIPPING: Solana funding wallet private key not configured")
+            self.skipTest("Solana funding wallet private key not configured")
         
         self.funding_wallet = Keypair.from_bytes(
-            base58.b58decode(config.FUNDING_WALLET_PRIVATE_KEY)
+            base58.b58decode(config.SOLANA_FUNDING_WALLET_PRIVATE_KEY)
         )
         print(f"Funding wallet: {self.funding_wallet.pubkey()}")
         print("="*60)

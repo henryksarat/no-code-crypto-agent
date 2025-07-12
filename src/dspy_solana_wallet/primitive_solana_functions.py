@@ -95,7 +95,8 @@ def create_associated_token_account_transaction(funding_wallet, to_wallet_public
     to_token_account = get_associated_token_address(to_wallet_public_key, token_type)
     mint_pubkey = Pubkey.from_string(token_type.value)
 
-    # Create instruction
+    print(f'creating associated token account for {to_wallet_public_key} {token_type}')
+    
     create_ata_ix = create_associated_token_account_instruction(
         funding_wallet.pubkey(),
         to_wallet_public_key,

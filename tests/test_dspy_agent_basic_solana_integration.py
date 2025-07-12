@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import patch, MagicMock
 
 # Import after adding to path
-from dspy_solana_wallet.agent_basic import agent_basic
-from dspy_solana_wallet.agent_tools import get_last_user_wallet_created
+from dspy_agents.agent_basic import agent_basic
+from dspy_agents import get_last_solana_user_wallet_created
 from dspy_solana_wallet.token_types import TokenType
 from .test_dspy_base import BaseDSPyAgentTest, TRANSACTION_WAIT_TIME, SOL_MIN_BALANCE
 
@@ -30,7 +30,8 @@ class TestDSPyAgentIntegration(BaseDSPyAgentTest):
         * verify public key returned in specific format
         * send USDG
         * send SOL
-        * send USDC* verify balance in a speicifc format.
+        * send USDC
+        * verify balance in a speicifc format.
         """
         
         print("\n🧪 Testing DSPy agent wallet creation and USDG, SOL, USDC transfer...")
@@ -59,7 +60,7 @@ class TestDSPyAgentIntegration(BaseDSPyAgentTest):
         
         try:
             print(f"💻 Get wallet public key")
-            expected_wallet_public_key = get_last_user_wallet_created()
+            expected_wallet_public_key = get_last_solana_user_wallet_created()
             get_wallet_public_key_request = f"What is public key of the last wallet that was just created. Return it in the format: wallet_public_key={{public_key}}."
             print(f"ℹ️  User_request to agent: {get_wallet_public_key_request}")
             get_wallet_public_key_result = agent_basic(user_request=get_wallet_public_key_request)

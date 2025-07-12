@@ -19,20 +19,15 @@ class BaseDSPyAgentTest(unittest.TestCase):
         print("\n" + "="*60)
         print("SETTING UP DSPY AGENT TEST...")
         print("="*60)
-        
-        # Debug: Print what's loaded from config
-        print(f"DEBUG: FUNDING_WALLET_PRIVATE_KEY = {config.FUNDING_WALLET_PRIVATE_KEY}")
-        print(f"DEBUG: FUNDING_WALLET_PUBLIC_KEY = {config.FUNDING_WALLET_PUBLIC_KEY}")
-        print(f"DEBUG: OPENAI_API_KEY = {config.OPENAI_API_KEY}")
-        
+
         # Verify we're on devnet
         if config.SOLANA_NETWORK != "devnet":
             print("❌ SKIPPING: Tests only work on devnet")
             self.skipTest("Tests only work on devnet")
 
-        if not config.FUNDING_WALLET_PRIVATE_KEY:
-            print("❌ SKIPPING: Funding wallet private key not configured")
-            self.skipTest("Funding wallet private key not configured")
+        if not config.SOLANA_FUNDING_WALLET_PRIVATE_KEY:
+            print("❌ SKIPPING: Solana funding wallet private key not configured")
+            self.skipTest("Solana funding wallet private key not configured")
 
         if not config.OPENAI_API_KEY:
             print("❌ SKIPPING: OPENAI_API_KEY not configured")
@@ -40,16 +35,16 @@ class BaseDSPyAgentTest(unittest.TestCase):
         
         os.environ["OPENAI_API_KEY"] = config.OPENAI_API_KEY
         
-        if not config.FUNDING_WALLET_PUBLIC_KEY:
-            print("❌ SKIPPING: Funding wallet public key not configured")
-            self.skipTest("Funding wallet public key not configured")
+        if not config.SOLANA_FUNDING_WALLET_PUBLIC_KEY:
+            print("❌ SKIPPING: Solana funding wallet public key not configured")
+            self.skipTest("Solana funding wallet public key not configured")
 
         print(f"✅ Network configuration: {config.SOLANA_NETWORK}")
-        print(f"✅ Funding wallet configured: {config.FUNDING_WALLET_PUBLIC_KEY}")
+        print(f"✅ Solana funding wallet configured: {config.SOLANA_FUNDING_WALLET_PUBLIC_KEY}")
 
         # Create funding wallet object for balance checks
         self.funding_wallet = Keypair.from_bytes(
-            base58.b58decode(config.FUNDING_WALLET_PRIVATE_KEY)
+            base58.b58decode(config.SOLANA_FUNDING_WALLET_PRIVATE_KEY)
         )
         print(f"ℹ️  Funding wallet: {self.funding_wallet.pubkey()}")
         

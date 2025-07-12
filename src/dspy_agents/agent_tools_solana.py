@@ -4,9 +4,9 @@ import os
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 
-from . import config
-from .token_types import TokenType
-from .primitive_solana_functions import (
+from dspy_solana_wallet import config
+from dspy_solana_wallet.token_types import TokenType
+from dspy_solana_wallet.primitive_solana_functions import (
     create_new_wallet,
     fund_wallet_with_sol_from_faucet,
     create_associated_token_account,
@@ -16,19 +16,19 @@ from .primitive_solana_functions import (
 )
 
 # Global variables
-last_user_wallet_created = None 
+last_solana_user_wallet_created = None 
 
 
-def get_funding_wallet_public_key() -> str:
+def get_solana_funding_wallet_public_key() -> str:
     """
-    Gets the public key of the funding wallet.
+    Gets the public key of the Solana funding wallet.
     """
 
-    if not config.FUNDING_WALLET_PRIVATE_KEY:
-        raise Exception("Funding wallet private key not configured")
+    if not config.SOLANA_FUNDING_WALLET_PRIVATE_KEY:
+        raise Exception("Solana funding wallet private key not configured")
     
     funding_wallet = Keypair.from_bytes(
-        base58.b58decode(config.FUNDING_WALLET_PRIVATE_KEY)
+        base58.b58decode(config.SOLANA_FUNDING_WALLET_PRIVATE_KEY)
     )
 
     print(f'funding wallet public key: {funding_wallet.pubkey()}')
@@ -37,20 +37,20 @@ def get_funding_wallet_public_key() -> str:
         'funding_wallet_public_key': funding_wallet.pubkey()
     }
 
-def create_wallet() -> str:
+def create_solana_wallet() -> str:
     """
     Creates a new Solana wallet and return the public key.
     
     Returns:
         public_key
     """
-    global last_user_wallet_created
+    global last_solana_user_wallet_created
 
     new_wallet = create_new_wallet()
 
-    last_user_wallet_created = new_wallet.pubkey()
+    last_solana_user_wallet_created = new_wallet.pubkey()
 
-    print(f'last_user_wallet_created: {last_user_wallet_created}')
+    print(f'last_solana_user_wallet_created: {last_solana_user_wallet_created}')
     print(f'created wallet {new_wallet.pubkey()}')
     
     private_key = base58.b58encode(bytes(new_wallet.to_bytes())).decode('ascii')
@@ -60,15 +60,15 @@ def create_wallet() -> str:
         'new_wallet_private_key': private_key
     }
 
-def get_last_user_wallet_created() -> str:
+def get_last_solana_user_wallet_created() -> str:
     """
-    Gets the public key of the last user wallet created.
+    Gets the public key of the last Solana user wallet created.
     """
-    return last_user_wallet_created
+    return last_solana_user_wallet_created
 
-def create_associated_token_account_for_token(user_wallet_public_key: str, token_type: str) -> bool:
+def create_solana_associated_token_account_for_token(user_wallet_public_key: str, token_type: str) -> bool:
     """
-    Creates a new associated token account for the given public key and token type. This will allow the public key
+    Creates a new Solana associated token account for the given public key and token type. This will allow the public key
     to hold the specified token. The fees will be paid from the funding wallet.
     
     Args:
@@ -78,17 +78,17 @@ def create_associated_token_account_for_token(user_wallet_public_key: str, token
     Returns:
         bool: True if successful
     """
-    if not config.FUNDING_WALLET_PRIVATE_KEY:
-        raise Exception("Funding wallet private key not configured")
+    if not config.SOLANA_FUNDING_WALLET_PRIVATE_KEY:
+        raise Exception("Solana funding wallet private key not configured")
     
     token_enum = TokenType.from_string(token_type)
     
     funding_wallet_object = Keypair.from_bytes(
-        base58.b58decode(config.FUNDING_WALLET_PRIVATE_KEY)
+        base58.b58decode(config.SOLANA_FUNDING_WALLET_PRIVATE_KEY)
     )
 
     print(f'creating {token_type.lower()} associated token account for {user_wallet_public_key}')
-    print(f'last_user_wallet_created in ata: {last_user_wallet_created}')
+    print(f'last_solana_user_wallet_created in ata: {last_solana_user_wallet_created}')
     
     user_pubkey = Pubkey.from_string(user_wallet_public_key)
 
@@ -99,7 +99,7 @@ def create_associated_token_account_for_token(user_wallet_public_key: str, token
     )
     return True
 
-def fund_user_wallet_with_sol_from_devnet(public_key: str, amount: float) -> bool:
+def fund_solana_user_wallet_with_sol_from_devnet(public_key: str, amount: float) -> bool:
     """
     Funds a user wallet with SOL on devnet.
     
@@ -115,8 +115,8 @@ def fund_user_wallet_with_sol_from_devnet(public_key: str, amount: float) -> boo
 
     result = fund_wallet_with_sol_from_faucet(public_key, amount)
 
-    global last_user_wallet_balance_sol
-    last_user_wallet_balance_sol += amount
+    global last_solana_user_wallet_balance_sol
+    last_solana_user_wallet_balance_sol += amount
 
     print(f'funding wallet with devnet {result}')
 
@@ -124,9 +124,9 @@ def fund_user_wallet_with_sol_from_devnet(public_key: str, amount: float) -> boo
         'success': result
     }
 
-def get_last_user_wallet_balance(user_wallet_public_key: str, token_type: str) -> float:
+def get_last_solana_user_wallet_balance(user_wallet_public_key: str, token_type: str) -> float:
     """
-    Gets the current balance of a specific token type for the last user wallet created.
+    Gets the current balance of a specific token type for the last Solana user wallet created.
     
     Args:
         user_wallet_public_key (str): The public key of the user wallet
@@ -137,20 +137,20 @@ def get_last_user_wallet_balance(user_wallet_public_key: str, token_type: str) -
     """
     token_enum = TokenType.from_string(token_type)
     
-    user_wallet_public_key = get_last_user_wallet_created()
+    user_wallet_public_key = get_last_solana_user_wallet_created()
 
-    print(f'DSPY function entered: get_last_user_wallet_balance, token_type: {token_type}, wallet_public_key: {user_wallet_public_key}')
+    print(f'DSPY function entered: get_last_solana_user_wallet_balance, token_type: {token_type}, wallet_public_key: {user_wallet_public_key}')
 
     balance = get_balance(user_wallet_public_key, token_enum)
     formatted_balance = token_enum.from_token_amount(balance)
 
-    print(f'DSPY function exit: get_last_user_wallet_balance, token_type: {token_type}, balance: {formatted_balance}')
+    print(f'DSPY function exit: get_last_solana_user_wallet_balance, token_type: {token_type}, balance: {formatted_balance}')
 
     return formatted_balance
 
-def send_token_from_funding_wallet(user_wallet_public_key: str, amount: float, token_type: str) -> dict:
+def send_solana_token_from_funding_wallet(user_wallet_public_key: str, amount: float, token_type: str) -> dict:
     """
-    Send tokens (SOL, USDC, PYUSD, or USDG) from the funding wallet to the user wallet.
+    Send tokens (SOL, USDC, PYUSD, or USDG) from the Solana funding wallet to the user wallet.
     
     Args:
         user_wallet_public_key (str): The public key of the user wallet
@@ -165,24 +165,24 @@ def send_token_from_funding_wallet(user_wallet_public_key: str, amount: float, t
             - amount (float): The amount of tokens transferred
             - token_type (str): The type of token that was transferred
     """
-    if not config.FUNDING_WALLET_PRIVATE_KEY:
-        raise Exception("Funding wallet private key not configured")
+    if not config.SOLANA_FUNDING_WALLET_PRIVATE_KEY:
+        raise Exception("Solana funding wallet private key not configured")
     
     token_enum = TokenType.from_string(token_type)
     
     funding_wallet_object = Keypair.from_bytes(
-        base58.b58decode(config.FUNDING_WALLET_PRIVATE_KEY)
+        base58.b58decode(config.SOLANA_FUNDING_WALLET_PRIVATE_KEY)
     )
     
     user_pubkey = Pubkey.from_string(user_wallet_public_key)
-    print(f'DSPY function entered: send_token_from_funding_wallet, token_type: {token_type}, amount: {amount}, destination wallet_public_key: {user_wallet_public_key}')
+    print(f'DSPY function entered: send_solana_token_from_funding_wallet, token_type: {token_type}, amount: {amount}, destination wallet_public_key: {user_wallet_public_key}')
 
     if token_enum == TokenType.SOL:
         transfer_sol(funding_wallet_object, user_pubkey, amount)
     else:
         transfer_token(funding_wallet_object, user_pubkey, token_enum, amount)
     
-    print(f'DSPY function exited: send_token_from_funding_wallet, token_type: {token_type}, amount: {amount}, destination wallet_public_key: {user_wallet_public_key}')
+    print(f'DSPY function exited: send_solana_token_from_funding_wallet, token_type: {token_type}, amount: {amount}, destination wallet_public_key: {user_wallet_public_key}')
 
     return {
         'success': True,

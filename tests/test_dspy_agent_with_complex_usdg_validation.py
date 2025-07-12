@@ -4,8 +4,7 @@ import sys
 from unittest.mock import patch, MagicMock
 
 # Import after adding to path
-from dspy_solana_wallet.agent_with_complex_usdg_validation import agent_with_usdg_validation
-from dspy_solana_wallet.agent_tools import get_last_user_wallet_created
+from dspy_agents import agent_with_usdg_validation, get_last_solana_user_wallet_created
 from dspy_solana_wallet.token_types import TokenType
 from .test_dspy_base import BaseDSPyAgentTest, TRANSACTION_WAIT_TIME
 
@@ -54,7 +53,7 @@ class TestDSPyAgentComplexUSDGValidation(BaseDSPyAgentTest):
             self.assertIn("wallet", create_result.process_result.lower())
             self.assertIn("usdg", create_result.process_result.lower())
             
-            expected_wallet_public_key = get_last_user_wallet_created()
+            expected_wallet_public_key = get_last_solana_user_wallet_created()
 
             self.wait_for_transaction(TRANSACTION_WAIT_TIME, "USDG transfers")
             self.verify_token_balance(expected_wallet_public_key, TokenType.USDG, 2.0, " (direct verification)")
@@ -102,7 +101,7 @@ class TestDSPyAgentComplexUSDGValidation(BaseDSPyAgentTest):
             self.assertIn("wallet", create_result.process_result.lower())
             self.assertIn("pyusd", create_result.process_result.lower())
             
-            expected_wallet_public_key = get_last_user_wallet_created()
+            expected_wallet_public_key = get_last_solana_user_wallet_created()
 
             self.wait_for_transaction(TRANSACTION_WAIT_TIME, "PYUSD transfers")
             self.verify_token_balance(expected_wallet_public_key, TokenType.PYUSD, 2.0, " (direct verification)")
@@ -150,7 +149,7 @@ class TestDSPyAgentComplexUSDGValidation(BaseDSPyAgentTest):
             self.assertIn("wallet", create_result.process_result.lower())
             self.assertIn("usdg", create_result.process_result.lower())
             
-            expected_wallet_public_key = get_last_user_wallet_created()
+            expected_wallet_public_key = get_last_solana_user_wallet_created()
 
             self.wait_for_transaction(TRANSACTION_WAIT_TIME, "USDG transfers")
             self.verify_token_balance(expected_wallet_public_key, TokenType.USDG, 0.1, " (direct verification)")

@@ -1,4 +1,9 @@
-# No Code Solana Agent using the DSPy AI Framework
+# No Code EVM and Solana Agent using the DSPy AI Framework
+
+<p align="center">
+  <img src="images/solana.png" alt="Solana Logo" width="120" height="120" style="margin: 0 20px; border-radius: 60px; background-color: #0d1117;">
+  <img src="images/evm.png" alt="Ethereum Logo" width="120" height="120" style="margin: 0 20px; border-radius: 60px; background-color: #0d1117;">
+</p>
 
 <p align="center">
   <img src="images/Circle_USDC_Logo.svg.png" alt="USDC Logo" width="120" height="120" style="margin: 0 20px; border-radius: 60px; background-color: #0d1117;">
@@ -6,23 +11,28 @@
   <img src="images/Paypal_PYUSD_Logo.webp" alt="PYUSD Logo" width="120" height="120" style="margin: 0 20px; border-radius: 60px; background-color: #0d1117;">
 </p>
 
-This Python project leverages DSPy to enable an AI agent to reason over a curated set of primitive functions related to Solana wallet creation and token transfers, including USDC, PYUSD, and USDG. The agent is guided by natural language instructions that define the task and constraints. Without any hardcoded logic, it determines which functions to call—and in what order—to fulfill the user's request autonomously.
+
+
+This Python project leverages DSPy to enable an AI agent to reason over a curated set of primitive functions related to multi-chain wallet creation and token transfers. The agent supports both Solana (USDC, PYUSD, USDG) and Ethereum chains (ETH, USDC, PYUSD). The agent is guided by natural language instructions that define the task and constraints. Without any hardcoded logic, it determines which functions to call—and in what order—to fulfill the user's request autonomously across multiple blockchain networks.
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [What is DSPy?](#what-is-dspy)
 - [Working Example](#working-example)
-  - [Basic wallet creation and funding [with screenshots]](#basic-wallet-creation-and-funding-with-screenshots)
+  - [Basic Solana wallet creation and funding [with screenshots]](#basic-solana-wallet-creation-and-funding-with-screenshots)
   - [How it works [Short Version]](#how-it-works-short-version)
 - [How it works [Detailed]](#how-it-works-detailed)
-  - [Overview](#overview-1)
-  - [DSPy Modules (Primitive Functions)](#dspy-modules-primitive-functions)
-  - [Agent Behavior Rules](#agent-behavior-rules)
+  - [Overview](#overview)
+  - [DSPy Modules](#dspy-modules)
+    - [Solana Primitive Functions](#solana-primitive-functions)
+    - [EVM Primitive Functions](#evm-primitive-functions)
+  - [Agent Behavior Rules for Solana](#agent-behavior-rules-for-solana)
+  - [Agent Behavior Rules for EVM](#agent-behavior-rules-for-evm)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
-  - [Setup if you have a funding wallet already](#setup-if-you-have-a-funding-wallet-already-with-sol-usdc-pyusd-and-usdg)
-  - [Setup completely from scratch](#setup-completely-from-scratch-with-no-funding-wallet)
+  - [Setup if you have a Solana funding wallet already with Sol, USDC, PYUSD, USDG on devnet](#setup-if-you-have-a-solana-funding-wallet-already-with-sol-usdc-pyusd-usdg-on-devnet)
+  - [Setup if you have an Ethereum funding wallet already with Eth, USDC, PYUSD, USDG on Sepolia](#setup-if-you-have-an-ethereum-funding-wallet-already-with-eth-usdc-pyusd-usdg-on-sepolia)
+  - [Setup completely from scratch with no solana and ethereum funding wallet](#setup-completely-from-scratch-with-no-solana-and-ethereum-funding-wallet)
 - [Usage](#usage)
 - [Tests](#tests)
 - [Notes](#notes)
@@ -33,13 +43,13 @@ DSPy is a framework for building modular, composable AI systems using declarativ
 
 ## Working Example
 
-### Basic wallet creation and funding [with screenshots]
+### Basic Solana wallet creation and funding [with screenshots]
 
 The best way to illustrate this is through an example: creating a wallet, funding it with SOL and USDC, and then formatting the output.
 
 ```python
 >>> result = agent_basic(user_request="""
-    Create a new wallet. This will be the user wallet. Fund it with 0.2 sol. 
+    Create a solana new wallet. This will be the user wallet. Fund it with 0.2 sol. 
     Make sure to also fund it with 2 USDC. Return me data in the following format: 
     user_wallet_public_key={user_wallet_public_key},sol_amount:{sol_amount},usdc_amount={usdc_amount}. 
     Make sure that the formattin is in 3 decimal places.
@@ -80,40 +90,37 @@ By navigating to the same public key on Devnet, you'll see that 3 USDG was succe
 
 ### How it works [Short Version]
 
-In [agent_tools.py](src/dspy_solana_wallet/agent_tools.py) notice that there are only 6 functions:
+In [agent_tools_solana.py](src/dspy_agents/agent_tools_solana.py) notice that there are only 6 functions:
 
 ```python
-   create_wallet,
-   create_associated_token_account_for_token
-   fund_user_wallet_with_sol_from_devnet
-   send_token_from_funding_wallet
-   get_last_user_wallet_created
-   get_last_user_wallet_balance
+   create_solana_wallet,
+   create_solana_associated_token_account_for_token,
+   fund_solana_user_wallet_with_sol_from_devnet,
+   send_solana_token_from_funding_wallet,
+   get_last_solana_user_wallet_created,
+   get_last_solana_user_wallet_balance,
 ```
 
-There is also a description of the behavior of the user agent in [agent_basic.py](src/dspy_solana_wallet/basic_agent.py):
+There is also a description of the behavior of the user agent in [agent_basic.py](src/dspy_agents/agent_basic.py):
 
 ```python
-    You are the Solana Crypto Wallet Administrator
+    You are the Multi-Chain Crypto Wallet Administrator
 
     References to stablecoin and stablecoins include PYUSD, USDG, and USDC.
 
-    You are equipped with a set of tools to manage Solana wallets and handle token 
+    You are equipped with a set of tools to manage Solana and EVM wallets and handle token 
     operations. Your available functions include:
+
+    Solana Functions:
     * Create a new Solana wallet
-    * Create an associated token account for stablecoins
-    * Send SOL and stablecoins from the funding wallet to the user wallet
-    * Get the public key of the last user wallet created
-    * Get the SOL and stablecoins balance of the last user wallet
-
-    Wallet Creation Rules:
-
-    When creating a new wallet:
-    * If no funding option is specified, first attempt to fund it using the Devnet faucet. If that fails, 
-    fall back to the funding walle.....
+    * Create an associated token account for Solana stablecoins
+    * Send SOL and stablecoins from the Solana funding wallet to the user wallet
+    * Get the public key of the last Solana user wallet created
+    * Get the SOL and stablecoins balance of the last Solana user wallet
+    .....
 ```
 
-The user agent will use the functions provided to decide how to execute the user_request. This is all done in a code-less way. You are able to add any english-speak constraints to the agent. An example of one that is added to the agent in [agent_basic.py](src/dspy_solana_wallet/agent_basic.py) is:
+The user agent will use the functions provided to decide how to execute the user_request. This is all done in a code-less way. You are able to add any english-speak constraints to the agent. An example of one that is added to the agent in [agent_basic.py](src/dspy_agents/agent_basic.py) is:
 
 ```python
      * For USDG if the transfer request and the current USDG balance eqaul to 6 or more, do not allow the transfer 
@@ -122,7 +129,7 @@ The user agent will use the functions provided to decide how to execute the user
      with: "You are a thief. You cannot transfer 4 or USDG more at once."
 ```
 
-**📖 For a detailed explanation of all DSPy modules and their functions, see [How it works [Detailed]](#how-it-works-detailed).**
+** For a detailed explanation of all DSPy modules and their functions, see [How it works [Detailed]](#how-it-works-detailed).**
 
 ## How it works [Detailed]
 
@@ -134,38 +141,60 @@ The DSPy agent interprets user intent expressed in natural English and selects f
 agent = dspy.ReAct(
     DSPyWalletServiceSericeBasic,
     tools=[
-        create_wallet,
-        create_associated_token_account_for_token,
-        fund_user_wallet_with_sol_from_devnet,
-        send_token_from_funding_wallet,
-        get_last_user_wallet_created,
-        get_last_user_wallet_balance,
+        # Solana tools
+        create_solana_wallet,
+        create_solana_associated_token_account_for_token,
+        fund_solana_user_wallet_with_sol_from_devnet,
+        send_solana_token_from_funding_wallet,
+        get_last_solana_user_wallet_created,
+        get_last_solana_user_wallet_balance,
+        
+        # EVM tools
+        create_evm_wallet,
+        send_evm_token_from_funding_wallet,
+        get_last_evm_user_wallet_created,
+        get_last_evm_user_wallet_balance,
     ]
-)
+) 
 ```
 
-### DSPy Modules (Primitive Functions)
+### DSPy Modules 
+
+#### **Solana Primitive Functions**
 
 The agent has access to the following primitive functions that handle all Solana wallet operations:
 
-#### **Wallet Management**
-- **`create_wallet()`** - Creates a new Solana wallet and returns the public key. This function generates a new keypair and stores it for future reference.
+#### Wallet Management
+- **`create_solana_wallet()`** - Creates a new Solana wallet and returns the public key. This function generates a new keypair and stores it for future reference.
 
-#### **Token Account Management**
-- **`create_associated_token_account_for_token()`** - Creates a new associated token account for the given public key and token type. This allows the wallet to hold specific tokens (USDC, PYUSD, or USDG). Fees are paid from the funding wallet.
+#### Token Account Management
+- **`create_solana_associated_token_account_for_token()`** - Creates a new associated token account for the given public key and token type. This allows the wallet to hold specific tokens (USDC, PYUSD, or USDG). Fees are paid from the funding wallet.
 
-#### **Funding Operations**
-- **`fund_user_wallet_with_sol_from_devnet()`** - Funds a user wallet with SOL from the devnet faucet. This is the preferred method for SOL funding when no specific funding source is mentioned.
-- **`send_token_from_funding_wallet()`** - Sends tokens (SOL, USDC, PYUSD, or USDG) from the configured funding wallet to the user wallet. This function handles both SOL and token transfers.
+#### Funding Operations
+- **`fund_solana_user_wallet_with_sol_from_devnet()`** - Funds a user wallet with SOL from the devnet faucet. This is the preferred method for SOL funding when no specific funding source is mentioned.
+- **`send_solana_token_from_funding_wallet()`** - Sends tokens (SOL, USDC, PYUSD, or USDG) from the configured funding wallet to the user wallet. This function handles both SOL and token transfers.
 
+#### Wallet Information
+- **`get_last_solana_user_wallet_created()`** - Returns the public key of the last user wallet that was created. This is used to reference the most recently created wallet.
+- **`get_last_solana_user_wallet_balance()`** - Gets the current balance of a specific token type for the last user wallet created. Supports SOL, USDC, PYUSD, and USDG.
 
-#### **Wallet Information**
-- **`get_last_user_wallet_created()`** - Returns the public key of the last user wallet that was created. This is used to reference the most recently created wallet.
-- **`get_last_user_wallet_balance()`** - Gets the current balance of a specific token type for the last user wallet created. Supports SOL, USDC, PYUSD, and USDG.
+### **EVM Primitive Functions**
 
-### **Agent Behavior Rules**
+The agent also has access to the following primitive functions that handle all EVM wallet operations:
 
-The DSPy agent follows these key rules when processing requests:
+#### Wallet Management
+- **`create_evm_wallet()`** - Creates a new Ethereum wallet and returns the public key. This function generates a new keypair and stores it for future reference.
+
+#### Funding Operations
+- **`send_evm_token_from_funding_wallet()`** - Sends tokens (ETH, USDC, PYUSD) from the configured Ethereum funding wallet to the user wallet. This function handles both ETH and token transfers.
+
+#### Wallet Information
+- **`get_last_evm_user_wallet_created()`** - Returns the public key of the last Ethereum user wallet that was created. This is used to reference the most recently created EVM wallet.
+- **`get_last_evm_user_wallet_balance()`** - Gets the current balance of a specific token type for the last Ethereum user wallet created. Supports ETH, USDC, and PYUSD.
+
+### **Agent Behavior Rules for Solana**
+
+The DSPy agent follows these key rules when processing Solana requests:
 
 **For New Wallet Creation:**
 - If no funding option is specified, try devnet faucet first, then use funding wallet if faucet fails
@@ -180,10 +209,13 @@ The DSPy agent follows these key rules when processing requests:
 
 **Important Constraints:**
 - Create associated token accounts before sending tokens
-- Never allow USDG balance to exceed 5
-- Never allow single USDG transfers of 4 or more (returns "You are a thief.")
 - Only provide funding wallet public key when explicitly requested
 - Never disclose private keys
+
+### **Agent Behavior Rules for EVM**
+
+Agent behavior for EVM is much more basic and simplified. See the agent description in [agent_basic.py](src/dspy_agents/agent_basic.py) for agent behavior.
+
 
 ## Prerequisites
 
@@ -192,7 +224,7 @@ The DSPy agent follows these key rules when processing requests:
 
 ## Setup 
 
-### Setup if you have a funding wallet already with Sol, USDC, PYUSD, and USDG
+### Setup if you have a Solana funding wallet already with Sol, USDC, PYUSD, USDG on devnet
 
 1. Clone this repository
 2. Create virtual vwnc
@@ -201,11 +233,11 @@ The DSPy agent follows these key rules when processing requests:
    ```
 3. Create a `.env` file in the project root with your funding wallet private key:
    ```
-   FUNDING_WALLET_PRIVATE_KEY={your_private_key_here}
-   FUNDING_WALLET_PUBLIC_KEY={your_public_key_here}
+   SOLANA_FUNDING_WALLET_PRIVATE_KEY={your_private_key_here}
+   SOLANA_FUNDING_WALLET_PUBLIC_KEY={your_public_key_here}
    OPENAI_API_KEY={your_openai_api_key_here}
    ```
-4. Make sure that your FUNDING_WALLET has SOL, USDC, and USDG funded 
+4. Make sure that your SOLANA_FUNDING_WALLET has SOL, USDC, PYUSD, and USDG funded on devnet
 5. Activate the virtual env
    ```bash
    source venv/bin/activate
@@ -219,7 +251,33 @@ The DSPy agent follows these key rules when processing requests:
    pip install -e .
    ```
 
-### Setup completely from scratch with no funding wallet
+### Setup if you have an Ethereum funding wallet already with Eth, USDC, PYUSD, USDG on Sepolia
+
+1. Clone this repository
+2. Create virtual vwnc
+   ```bash
+   python -m venv venv
+   ```
+3. Create a `.env` file in the project root with your funding wallet private key:
+   ```
+   EVM_FUNDING_WALLET_PRIVATE_KEY={your_private_key_here}
+   OPENAI_API_KEY={your_openai_api_key_here}
+   ```
+4. Make sure that your EVM_FUNDING_WALLET_PRIVATE_KEY ETH, PYUSD, USDC, and USDG funded 
+5. Activate the virtual env
+   ```bash
+   source venv/bin/activate
+   ```
+6. Install all dependencies 
+   ```bash
+   pip install -r requirements.txt
+   ```
+7. Install the current directory as a python package to be able to be used in a python shell
+   ```bash
+   pip install -e .
+   ```
+
+### Setup completely from scratch with no solana and ethereum funding wallet
 
 1. Clone this repository
 2. Create virtual vwnc
@@ -248,21 +306,23 @@ The DSPy agent follows these key rules when processing requests:
    ```
 8. Execute against the agent to create you a wallet from scratch and return you the public and private key:
 ```python
->>> from dspy_solana_wallet.agent_basic import *
->>> result = agent_basic(user_request="Create a new wallet and return me the private and public key of the wallet in this format: public_key={public_key}, private_key={private_key}. You have permission to disclose it.")
+>>> from dspy_agents.agent_basic import *
+>>> result = agent_basic(user_request="Create a new solana wallet and evm wallet. Return me the private and public key of the solana wallet and evm wallet in this format: solana_public_key={solana_public_key}, solana_private_key={solana_private_key},evm_public_key={evm_public_key},evm_private_key={evm_private_key}. You have permission to disclose it.")
 >>> print(result.process_result)
 Output:
-public_key=[HIDDEN FOR THE README], private_key=[HIDDEN FOR THE README]
+solana_public_key=[HIDDEN FOR THE README], solana_private_key=[HIDDEN FOR THE README], evm_public_key=[HIDDEN FOR THE README], evm_private_key=[HIDDEN FOR THE README], 
 ```
-9. Exit the python shell. The public_key and private_key that was returned, add it to the .env file alongside the OPENAI_API_KEY:
+9. Exit the python shell. The solana and evm public_key and private_key that was returned, add it to the .env file alongside the OPENAI_API_KEY:
    ```bash
-   FUNDING_WALLET_PRIVATE_KEY={your_private_key_here}
-   FUNDING_WALLET_PUBLIC_KEY={your_public_key_here}
+   SOLANA_FUNDING_WALLET_PRIVATE_KEY={your_solana_private_key_here}
+   SOLANA_FUNDING_WALLET_PUBLIC_KEY={your_solana_public_key_here}
    OPENAI_API_KEY={your_openai_api_key_here}
+   EVM_FUNDING_WALLET_PRIVATE_KEY={your_evm_private_key_here}
    ```
 10. With the public key visit the following faucet websites for funding. These websites may have moved at the time you read this, so use google to find the proper faucet website. At the time of writing, these websites are valid:
 * Solana: https://faucet.solana.com/
-* USDG: https://faucet.paxos.com/ 
+* Eth: https://cloud.google.com/application/web3/faucet/ethereum/sepolia 
+* USDG and PYUSD: https://faucet.paxos.com/ 
 * USDC: https://faucet.circle.com/
 
 ## Usage
@@ -274,7 +334,7 @@ public_key=[HIDDEN FOR THE README], private_key=[HIDDEN FOR THE README]
    ```
 3. Import everything so you can access the agent 
 ```python
->>> from dspy_solana_wallet.agent_basic import *
+>>> from dspy_agents.agent_basic import *
 >>> result = agent_basic(user_request="create me a new solana wallet. Return me the key.")
 >>> print(result.process_result)
 ```
