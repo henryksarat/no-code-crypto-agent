@@ -13,7 +13,7 @@
 
 
 
-This Python project leverages DSPy to enable an AI agent to reason over a curated set of primitive functions related to multi-chain wallet creation and token transfers. The agent supports both Solana (USDC, PYUSD, USDG) and Ethereum chains (ETH, USDC, PYUSD). The agent is guided by natural language instructions that define the task and constraints. Without any hardcoded logic, it determines which functions to call—and in what order—to fulfill the user's request autonomously across multiple blockchain networks.
+This Python project leverages DSPy to enable an AI agent to reason over a curated set of primitive functions related to multi-chain wallet creation and token transfers. The agent supports both Solana (SOL,USDC, PYUSD, USDG) and Ethereum chains (ETH, USDC, USDG, PYUSD). The agent is guided by natural language instructions that define the task and constraints. Without any hardcoded logic, it determines which functions to call—and in what order—to fulfill the user's request autonomously across multiple blockchain networks.
 
 ## Table of Contents
 
@@ -358,10 +358,11 @@ python -m pytest tests/test_faucet_integration.py -v -s
 
 ## Notes
 
-- The agent by default works against devnet, change environment in [config.py](src/dspy_solana_wallet/config.py)
-- Make sure your funding wallet has enough SOL, USDC, PYUSD, and USDG tokens on devnet
+- By default for EVM, this project supports Sepolia out of the box. You can easily extend it to work with Ethereum mainnet and other EVM-compatible blockchains.
+- The agent by default works against devnet for Solana, change environment in [config.py](src/dspy_solana_wallet/config.py)
+- Make sure your funding wallet has enough SOL, USDC, PYUSD, and USDG tokens on devnet if you want to use the Solana agent.
+- Make sure your funding wallet has enough ETH, USDC, PYUSD, and USDG tokens on devnet if you want to use the EVM agent.
 - Keep your private keys secure and never commit them to version control
-- Token transfers for USDG and PYUSD leverage the Token-2022 program, while USDC transfers use the standard SPL Token program and associated libraries
+- Token transfers on Solana for USDG and PYUSD leverage the Token-2022 program, while USDC transfers use the standard SPL Token program and associated libraries
 - In Solana, to recieve either a SPL token or Token-2022 token, you must create an Associated Token Account, this the agent does that.
-
-
+- When interacting with the agent make sure to be explicit if you want to operate on Solana and EVM wallets and tokens.

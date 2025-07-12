@@ -12,10 +12,5 @@ SOLANA_FUNDING_WALLET_PRIVATE_KEY = os.getenv("SOLANA_FUNDING_WALLET_PRIVATE_KEY
 SOLANA_FUNDING_WALLET_PUBLIC_KEY = os.getenv("SOLANA_FUNDING_WALLET_PUBLIC_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-RANDOM = os.getenv("RANDOM")
-
-# Token configuration
-TOKEN_AMOUNT = 1  # Amount to transfer
-
 # Faucet configuration
 FAUCET_URL = "https://api.devnet.solana.com" if SOLANA_NETWORK == "devnet" else None 
